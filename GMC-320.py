@@ -5,7 +5,6 @@ import sys
 import requests
 import json
 
-# Change API key to your own
 readAPIKey = ""
 writeAPIKey = ""
 baseURL = "https://api.thingspeak.com/"
@@ -29,8 +28,6 @@ def writeField(data : int):
     )
     
     r = requests.get(url)
-    
-    print(r.text)
 
 def getField(channelID, fieldID = 1, results = 0):
     data = []
@@ -149,7 +146,7 @@ try:
     while True:
         cl = getClock()
 
-        currentCPM = 0
+        currentCPM = -1
 
         if gmc is None:
             try:
@@ -158,26 +155,39 @@ try:
                 gmc = None
 
         if gmc is not None:
-            currentCPM = getCPM(gmc)
+            try:
+                currentCPM = getCPM(gmc)
+            except serial.SerialException:
+                currentCPM = -1
 
-        cpm = "{0}, {1}\n".format(cl, currentCPM)
+        if currentCPM >= 0:
+            cpm = "{0}, {1}\n".format(cl, currentCPM)
 
-        sli = safetyLevelInt(currentCPM)
-        sls = safetyLevelString(sli)
-        print(sls)
+            sli = safetyLevelInt(currentCPM)
+            sls = safetyLevelString(sli)
 
-        if currentCPM > peak:
-            peak = currentCPM
+            if currentCPM > peak:
+                peak = currentCPM
 
-        print("{0} | {1} (Peak: {2})".format(cl, currentCPM, peak))
+            print("{0} | {1} (Peak: {2}) [{3}]".format(cl, currentCPM, peak, sls))
 
-        if gmc is not None:
-            writeField(currentCPM)
-            print("Sent to Thingspeak...")
+            if gmc is not None:
+                writeField(currentCPM)
+                print("Sent to Thingspeak...")
+            else:
+                print("There is an issue with radiation detector...")
         else:
-            print("There is an issue with radiation detector...")
+            print("An error occured while trying to communicate with GMC-320!")
+
+            if isinstance(gmc, serial.Serial):
+                gmc.close()
+
+            gmc = None
 
 
         time.sleep(slp)
 except KeyboardInterrupt:
+    if isinstance(gmc, serial.Serial):
+        gmc.close()
+    
     pass
