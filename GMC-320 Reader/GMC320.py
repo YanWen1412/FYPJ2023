@@ -71,11 +71,11 @@ if __name__ == "__main__":
 
                 print("{0} | {1} (Peak: {2}) [{3}]".format(cl, currentCPM, peak, sls))
 
-                # if gmc is not None:
-                #     ts.writeField(currentCPM)
-                #     print("Sent to Thingspeak...")
-                # else:
-                #     print("There is an issue with radiation detector...")
+                if gmc is not None:
+                    ts.writeField(currentCPM)
+                    print("Sent to Thingspeak...")
+                else:
+                    print("There is an issue with radiation detector...")
             else:
                 print("An error occured while trying to communicate with GMC-320!")
 
