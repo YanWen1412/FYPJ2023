@@ -3,6 +3,39 @@ from utils import baseURL
 import requests
 import json
 
+class InvalidFieldIDError(Exception):
+    """
+    Exception raised when Field ID is invalid for Thingspeak.
+
+    Attributes:
+        message -- explanation of the error
+    """
+    def __init__(self, message : str = "Invalid Field ID") -> None:
+        self.__message = message
+        super().__init__(self.__message)
+
+class InvalidChannelIDError(Exception):
+    """
+    Exception raised when Channel ID is invalid for Thingspeak.
+
+    Attributes:
+        message -- explanation of the error
+    """
+    def __init__(self, message : str = "Invalid Channel ID") -> None:
+        self.__message = message
+        super().__init__(self.__message)
+
+class InvalidAPIKeyError(Exception):
+    """
+    Exception raised when API Key is invalid for Thingspeak.
+
+    Attributes:
+        message -- explanation of the error
+    """
+    def __init__(self, message : str = "Invalid API Key") -> None:
+        self.__message = message
+        super().__init__(self.__message)
+
 # Basic Thingspeak class
 class Thingspeak():
     '''
@@ -13,7 +46,7 @@ class Thingspeak():
         self.__writeAPIKey = writeAPIKey
         
     ''' 
-    Writes/Sends data to Thingspeak with field ID of fieldID
+    Writes/Sends data to a specific Thingspeak field with field ID of fieldID
 
     Example url: 
     https://api.thingspeak.com/update?api_key={apikey}&field1=0
@@ -22,6 +55,8 @@ class Thingspeak():
     Parameters:
     data => data you want to be sent to Thingspeak (One integer)
     fieldID => ID of Field, seen after "?api_key={apikey}&" (Integer)
+
+    Returns True if successful, otherwise False
     '''
     def writeField(self, data : int, fieldID : int = 1):
         if (data < 0):
@@ -35,6 +70,28 @@ class Thingspeak():
         )
     
         r = requests.get(url)
+
+        if r.text == "0":
+            raise InvalidAPIKeyError("Invalid Write API Key")
+            
+        return True
+
+    ''' 
+    Writes/Sends multiple data to a specific Thingspeak field with field ID of fieldID
+
+    Example url: 
+    https://api.thingspeak.com/update?api_key={apikey}&field1=0
+    https://api.thingspeak.com/update?api_key={apikey}&field{fieldID}={data}
+
+    Parameters:
+    data => list of data you want to be sent to Thingspeak (List)
+    fieldID => ID of Field, seen after "?api_key={apikey}&" (Integer)
+
+    Returns True if successful, otherwise False
+    '''
+    def writeListToField(self, data : list, fieldID : int = 1):
+        for d in data:
+            self.writeField(data=d, fieldID=fieldID)
 
     '''
     Gets data from a specific field from Thingspeak
@@ -73,11 +130,29 @@ class Thingspeak():
         bodyraw = requests.get(url).text
         body = json.loads(bodyraw)
         
+        if isinstance(body, int) and body == -1:
+            return InvalidAPIKeyError("Invalid Read API Key")
+
+        status = None
+        try:
+            status = body["status"]
+        except:
+            status = None
+
+        if status == "404":
+            raise InvalidChannelIDError()
+        
+        if status == "400":
+            raise InvalidFieldIDError()
+
         feedsData = body["feeds"]
         
-        for feed in feedsData:
-            field1Data = feed["field1"]
-            
-            data.append(field1Data)
+        try:
+            for feed in feedsData:
+                field1Data = feed["field1"]
+                
+                data.append(field1Data)
+        except KeyError:
+            data = []
             
         return data

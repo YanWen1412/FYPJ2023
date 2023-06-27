@@ -1,5 +1,5 @@
 from utils import *
-from Thingspeak import Thingspeak
+from Thingspeak import *
 
 import time
 import serial
@@ -30,8 +30,8 @@ def getCPM(gmc : serial.Serial):
 Main function
 '''
 if __name__ == "__main__":
-    cl = getClock()
-    ts = Thingspeak(readAPIKey, writeAPIKey)
+    currentDatetime = getCurrentDatetime()
+    thingspeakAPI = Thingspeak(readAPIKey, writeAPIKey)
 
     if len(sys.argv) > 1:
         print("Interval: {0} sec".format(sys.argv[1]))
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
     try:
         while True:
-            cl = getClock()
+            currentDatetime = getCurrentDatetime()
 
             currentCPM = -1
 
@@ -61,19 +61,22 @@ if __name__ == "__main__":
                     currentCPM = -1
 
             if currentCPM >= 0:
-                cpm = "{0}, {1}\n".format(cl, currentCPM)
+                cpm = "{0}, {1}\n".format(currentDatetime, currentCPM)
 
-                sli = safetyLevelInt(currentCPM)
-                sls = safetyLevelString(sli)
+                safetyLvlInt = safetyLevelInt(currentCPM)
+                safetyLvlStr = safetyLevelString(safetyLvlInt)
 
                 if currentCPM > peak:
                     peak = currentCPM
 
-                print("{0} | {1} (Peak: {2}) [{3}]".format(cl, currentCPM, peak, sls))
+                print("{0} | {1} (Peak: {2}) [{3}]".format(currentDatetime, currentCPM, peak, safetyLvlStr))
 
                 if gmc is not None:
-                    ts.writeField(currentCPM)
-                    print("Sent to Thingspeak...")
+                    try:
+                        thingspeakAPI.writeField(currentCPM)
+                        print("Sent to Thingspeak...")
+                    except InvalidAPIKeyError:
+                        print("Invalid API Key provided for Thingspeak.")
                 else:
                     print("There is an issue with radiation detector...")
             else:
