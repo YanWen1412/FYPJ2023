@@ -6,7 +6,7 @@ import serial
 import sys
 
 try:
-    gmc = serial.Serial("COM5", speed, timeout=3)
+    gmc = serial.Serial("COM3", speed, timeout=3)
 except serial.SerialException:
     gmc = None
 

@@ -1,4 +1,4 @@
-from utils import mqttClientID, mqttPassword, mqttUsername, sleep
+from utils import mqttPassword, mqttUsername, sleep
 
 import paho.mqtt.publish as publish
 import time

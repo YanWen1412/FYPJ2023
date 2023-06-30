@@ -4,12 +4,13 @@ readAPIKey = "08M2G2N3H2XZ88U3"
 writeAPIKey = "RVBKFIENCP30ZJLG"
 baseURL = "https://api.thingspeak.com/"
 
-mqttClientID = "AS4iHDA9EyQWIzIgMgE7Fh4"
+mqttClientID = "AS4iHDA9EyQWIzIgMgE7Fh4" 
 mqttUsername = mqttClientID #"AS4iHDA9EyQWIzIgMgE7Fh4"
 mqttPassword = "ICC8Fs3k6KkIshjD7J97/CQq"
 
+
 speed = 115200
-sleep = 3
+sleep = 15
 
 '''
 Converts value given by safetyLevelInt() to a readable string. List is provided in safetyLevelInt()
