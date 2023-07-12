@@ -20,3 +20,4 @@ Written in **[Python 3.11](https://www.python.org/downloads/release/python-3110/
 | GMC320.py | Main file for the program. Where the magic really happens |
 | TS-Test.py | File used to test Thingspeak.py |
 | IFTTT.py | File used for IFTTT |
+| sample-utils.py | A sample util file. Instructions are in the file itself |
