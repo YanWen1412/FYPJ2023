@@ -1,15 +1,21 @@
+'''
+FILL IN THE API KEYS AND CREDENTIALS BELOW
+
+RENAME THIS FILE TO "utils.py"
+'''
+
 import datetime
 
-readAPIKey = "08M2G2N3H2XZ88U3"
-writeAPIKey = "RVBKFIENCP30ZJLG"
+readAPIKey = ""
+writeAPIKey = ""
 baseURL = "https://api.thingspeak.com/"
 
-sendIFTTTNotification = False
-iftttAPIKey = "boH1aUcBZ5dtmZrxm_JZ11"
+sendIFTTTNotification = True
+iftttAPIKey = ""
 
-mqttClientID = "DBwgOSQjGgg1IQsWBgg4Ajc" 
-mqttUsername = mqttClientID #"DBwgOSQjGgg1IQsWBgg4Ajc"
-mqttPassword = "ZYnuDxnpmn9dxGbnjO0Q+pmp"
+mqttClientID = "" 
+mqttUsername = mqttClientID
+mqttPassword = ""
 
 gmc320Port = "COM3"
 
