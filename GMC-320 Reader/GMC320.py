@@ -1,12 +1,13 @@
 from utils import *
 from Thingspeak import *
+from IFTTT import *
 
 import time
 import serial
 import sys
 
 try:
-    gmc = serial.Serial("COM3", speed, timeout=3)
+    gmc = serial.Serial(gmc320Port, speed, timeout=3)
 except serial.SerialException:
     gmc = None
 
@@ -31,6 +32,7 @@ Main function
 '''
 if __name__ == "__main__":
     currentDatetime = getCurrentDatetime()
+    ift = IFTTT(iftttAPIKey)
     thingspeakAPI = Thingspeak(readAPIKey, writeAPIKey)
 
     if len(sys.argv) > 1:
@@ -50,7 +52,7 @@ if __name__ == "__main__":
 
             if gmc is None:
                 try:
-                    gmc = serial.Serial("COM5", speed, timeout=3)
+                    gmc = serial.Serial(gmc320Port, speed, timeout=3)
                 except serial.SerialException:
                     gmc = None
 
@@ -64,12 +66,19 @@ if __name__ == "__main__":
                 cpm = "{0}, {1}\n".format(currentDatetime, currentCPM)
 
                 safetyLvlInt = safetyLevelInt(currentCPM)
-                safetyLvlStr = safetyLevelString(safetyLvlInt)
+                safetyLvl = safetyLevelString(safetyLvlInt)
+                safetyLvlStr = " | ".join(safetyLvl)
 
                 if currentCPM > peak:
                     peak = currentCPM
 
                 print("{0} | {1} (Peak: {2}) [{3}]".format(currentDatetime, currentCPM, peak, safetyLvlStr))
+
+                if safetyLvlInt != 1 and sendIFTTTNotification:
+                    print("Sending IFTTT Notification...")
+                    
+                    ift.sendNotification(safetyLvl[0], currentCPM, safetyLvl[1])
+                    print("IFTTT Notification sent")
 
                 if gmc is not None:
                     try:

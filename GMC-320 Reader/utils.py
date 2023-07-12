@@ -4,10 +4,14 @@ readAPIKey = "08M2G2N3H2XZ88U3"
 writeAPIKey = "RVBKFIENCP30ZJLG"
 baseURL = "https://api.thingspeak.com/"
 
-mqttClientID = "AS4iHDA9EyQWIzIgMgE7Fh4" 
-mqttUsername = mqttClientID #"AS4iHDA9EyQWIzIgMgE7Fh4"
-mqttPassword = "ICC8Fs3k6KkIshjD7J97/CQq"
+sendIFTTTNotification = False
+iftttAPIKey = "boH1aUcBZ5dtmZrxm_JZ11"
 
+mqttClientID = "DBwgOSQjGgg1IQsWBgg4Ajc" 
+mqttUsername = mqttClientID #"DBwgOSQjGgg1IQsWBgg4Ajc"
+mqttPassword = "ZYnuDxnpmn9dxGbnjO0Q+pmp"
+
+gmc320Port = "COM3"
 
 speed = 115200
 sleep = 15
@@ -15,18 +19,23 @@ sleep = 15
 '''
 Converts value given by safetyLevelInt() to a readable string. List is provided in safetyLevelInt()
 '''
+# 1 => Safe | No action needed
+# 2 => Medium | Check reading regularly
+# 3 => High | Closely watch reading, find out why
+# 4 => Very high | Leave area asap and find out why
+# 5 => Extremely high | Evacuate immediately and inform government
 def safetyLevelString(safetyLevel: int):
-    msg = "Unknown | Check if there are any readings... error occured"
+    msg = ["Unknown", "Check if there are any readings... error occured"]
     if safetyLevel == 1:
-        msg = "Safe | No action needed"
+        msg = ["Safe", "No action needed"]
     elif safetyLevel == 2:
-        msg = "Medium | Check reading regularly"
+        msg = ["Medium", "Check reading regularly"]
     elif safetyLevel == 3:
-        msg = "High | Closely watch reading, find out why"
+        msg = ["High", "Closely watch reading, find out why"]
     elif safetyLevel == 4:
-        msg = "Very high | Leave area asap and find out why"
+        msg = ["Very high", "Leave area asap and find out why"]
     elif safetyLevel == 5:
-        msg = "Extremely high | Evacuate immediately and inform government"
+        msg = ["Extremely high", "Evacuate immediately and inform government"]
 
     return msg
 

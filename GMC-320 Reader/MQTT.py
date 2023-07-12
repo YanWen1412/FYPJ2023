@@ -1,4 +1,4 @@
-from utils import mqttPassword, mqttUsername, sleep
+from utils import mqttPassword, mqttUsername, sleep, gmc320Port
 
 import paho.mqtt.publish as publish
 import time
@@ -53,7 +53,7 @@ if __name__ == "__main__":
         return gv
 
     try:
-        gmc = serial.Serial("COM5", speed, timeout=3)
+        gmc = serial.Serial(gmc320Port, speed, timeout=3)
     except serial.SerialException:
         gmc = None
 
