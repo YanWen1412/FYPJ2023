@@ -1,6 +1,7 @@
 from utils import *
 from Thingspeak import *
 from IFTTT import *
+from MQTT import *
 
 import time
 import serial
@@ -33,6 +34,7 @@ Main function
 if __name__ == "__main__":
     currentDatetime = getCurrentDatetime()
     ift = IFTTT(iftttAPIKey)
+    mqtt = MQTT("2194131", mqttUsername, mqttPassword)
     thingspeakAPI = Thingspeak(readAPIKey, writeAPIKey)
 
     if len(sys.argv) > 1:
@@ -85,7 +87,9 @@ if __name__ == "__main__":
                         thingspeakAPI.writeField(currentCPM)
                         print("Sent to Thingspeak...")
                     except InvalidAPIKeyError:
-                        print("Invalid API Key provided for Thingspeak.")
+                        print("Invalid API Key provided for Thingspeak.\nSending through MQTT...")
+
+                        mqtt.sendToThingspeak(currentCPM)
                 else:
                     print("There is an issue with radiation detector...")
             else:
