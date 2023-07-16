@@ -1,7 +1,9 @@
-from utils import *
 from Thingspeak import *
 from IFTTT import *
 from MQTT import *
+from utils.utils import *
+
+from functions.getCPM import *
 
 import time
 import serial
@@ -13,20 +15,6 @@ except serial.SerialException:
     gmc = None
 
 peak = 0
-
-'''
-Gets live radiation data from GMC-320
-'''
-def getCPM(gmc : serial.Serial):
-    gmc.write(b"<GETCPM>>")
-    data = gmc.read(2)
-    
-    if len(data) >= 2:
-        gv = data[1]
-    else:
-        gv = 0
-    
-    return gv
 
 '''
 Main function
