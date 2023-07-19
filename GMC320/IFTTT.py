@@ -17,5 +17,8 @@ class IFTTT():
         data["value2"] = value2
         data["value3"] = value3
 
-        requests.post("https://maker.ifttt.com/trigger/Radiation_Medium_Level/with/key/{}".format(self.__apikey), data=data)
+        requests.post("https://maker.ifttt.com/trigger/Radiation_Level/with/key/{}"
+                      .format(
+                        self.__apikey
+                    ), data=data)
  

@@ -11,7 +11,7 @@ Returns:
 4 => Very high | Leave area asap and find out why
 5 => Extremely high | Evacuate immediately and inform government
 '''
-def safetyLevelInt(cpm : int):
+def safetyLevel(cpm : int):
     cpm = int(cpm)
 
     if cpm <= 50:
