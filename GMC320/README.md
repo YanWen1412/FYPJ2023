@@ -26,5 +26,6 @@ Written in **[Python 3.11](https://www.python.org/downloads/release/python-3110/
 ## Folders
 
 | Folder | Purpose |
+| ------------- |:-------------:|
 | functions | Contains function(s) that is used by the main program |
 | utils | Utilities folder. Contains utility function(s) and the config file for the program (utils.py from sample-utils.py) |
