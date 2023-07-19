@@ -12,7 +12,6 @@ class MQTT:
     '''
     Initialise Thingspeak class
     '''
-    
     def __init__(self, channelID, mqttUsername, mqttPassword, mqttClientID = None) -> None:
         self.__channelID = str(channelID)
         self.__topic = "channels/{}/publish".format(self.__channelID)
@@ -29,7 +28,17 @@ class MQTT:
         payload = "field1={}".format(cpm)
         try:
             print("Sending to Thingspeak through MQTT.")
-            publish.single(self.__topic, payload, hostname=self.mqttHost, transport=self.transport, port=self.port, client_id=self.__mqttClientID, auth={'username':self.__mqttUsername,'password':self.__mqttPassword})
+            publish.single(
+                self.__topic, 
+                payload, 
+                hostname=self.mqttHost, 
+                transport=self.transport, 
+                port=self.port, 
+                client_id=self.__mqttClientID, 
+                auth={
+                    'username':self.__mqttUsername,
+                    'password':self.__mqttPassword
+                })
         except Exception as e:
             print(e)
 

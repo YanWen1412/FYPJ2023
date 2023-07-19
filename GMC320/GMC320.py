@@ -1,6 +1,9 @@
-from utils import *
 from Thingspeak import *
 from IFTTT import *
+from MQTT import *
+from utils.utils import *
+
+from functions.getCPM import *
 
 import time
 import serial
@@ -14,25 +17,12 @@ except serial.SerialException:
 peak = 0
 
 '''
-Gets live radiation data from GMC-320
-'''
-def getCPM(gmc : serial.Serial):
-    gmc.write(b"<GETCPM>>")
-    data = gmc.read(2)
-    
-    if len(data) >= 2:
-        gv = data[1]
-    else:
-        gv = 0
-    
-    return gv
-
-'''
 Main function
 '''
 if __name__ == "__main__":
     currentDatetime = getCurrentDatetime()
     ift = IFTTT(iftttAPIKey)
+    mqtt = MQTT("2194131", mqttUsername, mqttPassword)
     thingspeakAPI = Thingspeak(readAPIKey, writeAPIKey)
 
     if len(sys.argv) > 1:
@@ -85,7 +75,9 @@ if __name__ == "__main__":
                         thingspeakAPI.writeField(currentCPM)
                         print("Sent to Thingspeak...")
                     except InvalidAPIKeyError:
-                        print("Invalid API Key provided for Thingspeak.")
+                        print("Invalid API Key provided for Thingspeak.\nSending through MQTT...")
+
+                        mqtt.sendToThingspeak(currentCPM)
                 else:
                     print("There is an issue with radiation detector...")
             else:
