@@ -21,7 +21,8 @@ peakCPM = 0
 prevCPM = 0
 
 # Fill in the list with data of numbers to bypass sensor requirement for testing
-testCPMData = [40, 52, 500, 500, 1500, 9000, 2]
+testCPMData = [] #[40, 52, 500, 500, 1500, 9000, 2]
+isTesting = len(testCPMData) > 0
 
 '''
 Main function
@@ -32,22 +33,13 @@ if __name__ == "__main__":
     mqtt = MQTT("2194131", mqttUsername, mqttPassword)
     thingspeakAPI = Thingspeak(readAPIKey, writeAPIKey)
 
-    if len(sys.argv) > 1:
-        print("Interval: {0} sec".format(sys.argv[1]))
-
-        try:
-            slp = float(sys.argv[1])
-        except:
-            print("Usage: python gmc-320.py 10 (For 10 second interval)\nTimer argument [1] must be an integer.")
-            sys.exit(1)
-
     try:
         while True:
             currentDatetime = getCurrentDatetime()
 
             currentCPM = -1
 
-            if len(testCPMData) > 0:
+            if isTesting:
                 currentCPM = testCPMData[0]
             else:
                 if gmc is None:
@@ -75,7 +67,7 @@ if __name__ == "__main__":
 
                 print("{0} | {1} (Peak: {2}) [{3}]".format(currentDatetime, currentCPM, peakCPM, safetyLvlStr))
 
-                if gmc is not None or len(testCPMData) > 0:
+                if gmc is not None and isTesting == False:
                     if sendToThingspeak:
                         try:
                             thingspeakAPI.writeField(currentCPM)
@@ -86,6 +78,8 @@ if __name__ == "__main__":
                             mqtt.sendToThingspeak(currentCPM)
                     else:
                         print("Thingspeak is disabled. Enable it in utils.py")
+                elif isTesting:
+                    print("Testing... not sending to Thingspeak.")
                 else:
                     print("There is an issue with radiation detector...")
                 
@@ -106,9 +100,10 @@ if __name__ == "__main__":
 
                 gmc = None
 
-            if len(testCPMData) > 0:
+            if isTesting:
                 testCPMData.pop(0)
                 print(testCPMData)
+                print(isTesting)
 
             time.sleep(sleep)
     except KeyboardInterrupt:

@@ -4,6 +4,7 @@ GMC320/utils.py
 GMC320/utils/utils.py
 GMC320/donotshare
 
+GMC320/venv/*
 GMC320/__pycache__/*
 GMC320/functions/__pycache__/*
 GMC320/utils/__pycache__/*
