@@ -56,6 +56,7 @@ WiFiClient client;
 #endif
 
 #include <DHT.h>
+#include <Arduino.h>
 
 #define DHTPIN 2
 #define DHTTYPE DHT11
@@ -185,8 +186,14 @@ void loop() {
   payload += "&field2=";
   payload += hbuff;
 
-  mqttPublish(channelID, (char*)payload.c_str());
-  lastPublishMillis = millis();
+  if (!isnan(t) && !isnan(h))
+  {
+    mqttPublish(channelID, (char*)payload.c_str());
+    lastPublishMillis = millis();
+  }
+  else {
+    Serial.println("Temperature and Humidity nan");
+  }
 
   delay(15000);
 }
