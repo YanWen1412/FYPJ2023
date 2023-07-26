@@ -7,7 +7,7 @@ Written in **[Python 3.11](https://www.python.org/downloads/release/python-3110/
 
 **Library used:**
 * [requests](https://pypi.org/project/requests/)
-* ~~[umqtt.robust](https://pypi.org/project/micropython-umqtt.robust/)~~
+* [umqtt.robust](https://pypi.org/project/micropython-umqtt.robust/)
 * [pyserial](https://pypi.org/project/pyserial/)
 
 ## Files
