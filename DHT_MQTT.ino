@@ -4,7 +4,7 @@
 #define channelID 2175640
 const char mqttUserName[] = "KCkfGAEMBxwLJQUiFD08FTI";
 const char clientID[] = "KCkfGAEMBxwLJQUiFD08FTI";
-const char mqttPass[] = "1+f8tsV0PcDNyDO9Vq36socN";
+const char mqttPass[] = "c048R36OlE6ayRc6wNYslRWA";
 
 // It is strongly recommended to use secure connections. However, certain hardware does not work with the WiFiClientSecure library.
 // Comment out the following #define to use non-secure MQTT connections to ThingSpeak server.

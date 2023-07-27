@@ -87,5 +87,5 @@ void loop() {
           Serial.println("Waiting...");
   
   // thingspeak needs minimum 15 sec delay between updates
-  delay(15000);
+  delay(1000);
 }
