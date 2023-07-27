@@ -1,4 +1,4 @@
-from utils.utils import baseURL
+from utils.utils import baseURL, readAPIKey, writeAPIKey
 
 import requests
 import json
@@ -156,3 +156,15 @@ class Thingspeak():
             data = []
             
         return data
+    
+if __name__ == "__main__":
+    ts = Thingspeak(readAPIKey, writeAPIKey)
+    testCPMData = 900
+
+    print("Test CPM: {}".format(testCPMData))
+    try:
+        ts.writeField(testCPMData)
+        print("Sent to Thingspeak...")
+    except InvalidAPIKeyError:
+        print("Invalid API Key provided for Thingspeak.")
+    
