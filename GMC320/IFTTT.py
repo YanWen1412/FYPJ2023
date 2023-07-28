@@ -1,3 +1,5 @@
+from utils.utils import iftttAPIKey
+
 import requests #, random
 
 class IFTTT():
@@ -6,11 +8,13 @@ class IFTTT():
         self.__apikey = apikey
 
     '''
+    Activates Radiation IFTTT and sends an app and email to recipients through IFTTT
+
     Value1 => Radiation Level (Medium, Low, High or Unknown)
     Value2 => CPM
     Value3 => Advice
     '''
-    def sendNotification(self, value1, value2, value3):
+    def sendRadiationNotification(self, value1, value2, value3):
         data = {}
 
         data["value1"] = value1
@@ -21,4 +25,17 @@ class IFTTT():
                       .format(
                         self.__apikey
                     ), data=data)
+
+# Test code
+if __name__ == "__main__":
+    from utils.safetyLevel import safetyLevel
+
+    import random
+
+    ifttt = IFTTT(iftttAPIKey)
+
+    cpm = random.randint(51, 3000)
+    safetyLvl = safetyLevel(cpm)
+
+    ifttt.sendRadiationNotification("[TEST RUN] {}".format(safetyLvl[1]), cpm, safetyLvl[2])
  

@@ -86,7 +86,7 @@ if __name__ == "__main__":
                 if safetyLvlInt != 1 and sendIFTTTNotification and not sendToThingspeak:
                     if currentCPM != prevCPM:
                         print("Sending IFTTT Notification...")
-                        ift.sendNotification(safetyLvl[0], currentCPM, safetyLvl[1])
+                        ift.sendRadiationNotification(safetyLvl[0], currentCPM, safetyLvl[1])
                         print("IFTTT Notification sent")
                     else:
                         print("IFTTT notification for CPM {} sent before. Not sending.".format(currentCPM))
