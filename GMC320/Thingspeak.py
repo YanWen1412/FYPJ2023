@@ -159,7 +159,7 @@ class Thingspeak():
     
 if __name__ == "__main__":
     ts = Thingspeak(readAPIKey, writeAPIKey)
-    testCPMData = 900
+    testCPMData = 9000
 
     print("Test CPM: {}".format(testCPMData))
     try:
